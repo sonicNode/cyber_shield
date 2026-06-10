@@ -152,7 +152,7 @@ Always ground recommendations in the user's actual data when available."""
 
             full_prompt = f"{system_prompt}\n\nUser question: {user_message}"
             response = client.models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-2.5-flash",
                 contents=full_prompt
             )
 
@@ -161,12 +161,14 @@ Always ground recommendations in the user's actual data when available."""
         except requests.exceptions.Timeout:
             return "⚠️ Request timed out. Please try again."
         except Exception as e:
-            # Fallback: rule-based response
-            return self._fallback_response(user_message, context_summary)
+            # Fallback: rule-based response with error details
+            return self._fallback_response(user_message, context_summary, error_msg=str(e))
 
-    def _fallback_response(self, question: str, context: str) -> str:
+    def _fallback_response(self, question: str, context: str, error_msg: Optional[str] = None) -> str:
         """Simple rule-based fallback when API is unavailable."""
         badge = "\n\n---\n*⚙️ Offline mode — rule-based response (configure Gemini API key for AI-powered answers)*"
+        if error_msg:
+            badge += f"\n\n*(Error info: {error_msg})*"
         q = question.lower()
         if "top risk" in q or "highest" in q or "critical" in q:
             return ("🔴 **Top Risk Threats**\n\nBased on your data, focus on High-risk threats "
