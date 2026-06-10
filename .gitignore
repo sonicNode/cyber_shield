@@ -1,0 +1,27 @@
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Database (auto-created at runtime)
+data/threats.db
+
+# Generated reports (auto-created at runtime)
+reports/*.html
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Streamlit secrets (NEVER commit this)
+.streamlit/secrets.toml
