@@ -156,7 +156,7 @@ Always ground recommendations in the user's actual data when available."""
                 contents=full_prompt
             )
 
-            return response.text
+            return response.text + "\n\n---\n*🤖 Powered by Gemini AI*"
 
         except requests.exceptions.Timeout:
             return "⚠️ Request timed out. Please try again."
@@ -166,27 +166,28 @@ Always ground recommendations in the user's actual data when available."""
 
     def _fallback_response(self, question: str, context: str) -> str:
         """Simple rule-based fallback when API is unavailable."""
+        badge = "\n\n---\n*⚙️ Offline mode — rule-based response (configure Gemini API key for AI-powered answers)*"
         q = question.lower()
         if "top risk" in q or "highest" in q or "critical" in q:
             return ("🔴 **Top Risk Threats**\n\nBased on your data, focus on High-risk threats "
                     "with scores above 66. These require immediate attention and isolation. "
-                    "Check the Dashboard for the Top 5 Critical Threats widget.")
+                    "Check the Dashboard for the Top 5 Critical Threats widget." + badge)
         if "mitigat" in q or "fix" in q or "remediat" in q:
             return ("🛡️ **Mitigation Priorities**\n\n"
                     "1. **High Risk**: Isolate immediately, patch within 24h\n"
                     "2. **Medium Risk**: Patch within 72h, increase monitoring\n"
                     "3. **Low Risk**: Include in next scheduled maintenance\n\n"
-                    "Always follow your incident response playbook for High-risk threats.")
+                    "Always follow your incident response playbook for High-risk threats." + badge)
         if "sql" in q:
             return ("💉 **SQL Injection Mitigation**\n\n"
                     "- Use parameterized queries / prepared statements\n"
                     "- Input validation and sanitization\n"
                     "- Web Application Firewall (WAF)\n"
                     "- Principle of least privilege on DB accounts\n"
-                    "- Regular security code reviews")
+                    "- Regular security code reviews" + badge)
         return ("I'm your CyberShield AI analyst. I can help you:\n"
                 "- Analyze your top threats and priorities\n"
                 "- Recommend mitigations for specific attack types\n"
                 "- Explain risk scores and context factors\n"
                 "- Guide incident response procedures\n\n"
-                "What would you like to know about your threat landscape?")
+                "What would you like to know about your threat landscape?" + badge)
