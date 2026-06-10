@@ -653,6 +653,26 @@ elif "Website Checker" in page:
     st.divider()
 
     # ── API Key config ─────────────────────────────────────────────────────────
+    # Try to load default keys from secrets or environment variables
+    vt_default = ""
+    ab_default = ""
+    us_default = ""
+    
+    try:
+        vt_default = st.secrets.get("VIRUSTOTAL_API_KEY", os.getenv("VIRUSTOTAL_API_KEY", ""))
+    except Exception:
+        vt_default = os.getenv("VIRUSTOTAL_API_KEY", "")
+        
+    try:
+        ab_default = st.secrets.get("ABUSEIPDB_API_KEY", os.getenv("ABUSEIPDB_API_KEY", ""))
+    except Exception:
+        ab_default = os.getenv("ABUSEIPDB_API_KEY", "")
+        
+    try:
+        us_default = st.secrets.get("URLSCAN_API_KEY", os.getenv("URLSCAN_API_KEY", ""))
+    except Exception:
+        us_default = os.getenv("URLSCAN_API_KEY", "")
+
     with st.expander("⚙️ Configure API Keys (optional — heuristic scan always works without keys)"):
         st.markdown("Get free keys from these sites:")
         st.markdown("- **VirusTotal**: https://www.virustotal.com/gui/join-us")
@@ -660,11 +680,11 @@ elif "Website Checker" in page:
         st.markdown("- **URLScan.io**: https://urlscan.io/user/signup")
         col_k1, col_k2, col_k3 = st.columns(3)
         with col_k1:
-            vt_key  = st.text_input("VirusTotal API Key", type="password", placeholder="Paste key here")
+            vt_key  = st.text_input("VirusTotal API Key", value=vt_default, type="password", placeholder="Paste key here")
         with col_k2:
-            ab_key  = st.text_input("AbuseIPDB API Key",  type="password", placeholder="Paste key here")
+            ab_key  = st.text_input("AbuseIPDB API Key",  value=ab_default, type="password", placeholder="Paste key here")
         with col_k3:
-            us_key  = st.text_input("URLScan.io API Key", type="password", placeholder="Paste key here")
+            us_key  = st.text_input("URLScan.io API Key", value=us_default, type="password", placeholder="Paste key here")
 
     # ── Single URL scan ────────────────────────────────────────────────────────
     st.markdown("### 🔍 Scan a Single Target")
