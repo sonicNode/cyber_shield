@@ -148,13 +148,11 @@ Always ground recommendations in the user's actual data when available."""
             if not api_key:
                 return self._fallback_response(user_message, context_summary)
             
-            client = genai.Client(api_key=api_key)
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel("gemini-2.5-flash")
 
             full_prompt = f"{system_prompt}\n\nUser question: {user_message}"
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=full_prompt
-            )
+            response = model.generate_content(full_prompt)
 
             return response.text + "\n\n---\n*🤖 Powered by Gemini AI*"
 
