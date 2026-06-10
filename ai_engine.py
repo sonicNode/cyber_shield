@@ -7,7 +7,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import json
-from google import genai
+import google.generativeai as genai
 import os
 import requests
 from typing import Optional

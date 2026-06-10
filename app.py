@@ -815,8 +815,8 @@ elif "Website Checker" in page:
             return ""
 
         styled_df = (results_df.style
-            .applymap(color_pass,  subset=["Pass"])
-            .applymap(color_level, subset=["Expected", "Got"]))
+            .map(color_pass,  subset=["Pass"])
+            .map(color_level, subset=["Expected", "Got"]))
         st.dataframe(styled_df, use_container_width=True, height=500)
 
 
